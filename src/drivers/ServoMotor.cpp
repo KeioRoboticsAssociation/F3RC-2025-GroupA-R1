@@ -1,5 +1,5 @@
 #include <mbed.h>
-#include "ServoMotor.hpp"
+#include "drivers/ServoMotor.hpp"
 
 ServoMotor::ServoMotor(PinName pin, float pwm_cycle, float pulse_width_min, float pulse_width_max, float range): pwmOut(pin), range(range)
 {
