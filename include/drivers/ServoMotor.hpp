@@ -15,6 +15,3 @@ class ServoMotor{
         static constexpr float MAX_ANGLE = 180.0f;
 
 };
-
-
-        
