@@ -22,3 +22,7 @@ void DCMotor::setDuty(float duty) {
 float DCMotor::getDuty() {
     return last_duty;
 }
+
+void DCMotor::stop(){
+    setDuty(0.0); // モーターを停止
+}
