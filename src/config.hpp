@@ -27,3 +27,20 @@ namespace PwmOutPins
     // ハードウェアの仕様を確認し、利用可能なPWMピンに変更してください。ここでは例として PA_3 を使用します。
     constexpr PinName SERVO2_PWM        = PA_3 ;     // サーボ用PWM (Tim2)
 }
+
+namespace ControllerConfig
+{
+    constexpr int BAUD_RATE = 115200;
+}
+
+namespace DriveConfig
+{
+    constexpr float WHEEL_RAD = 100.f;
+    constexpr float TREAD_RAD = 100.f;
+
+    // ここの値は要検証
+    constexpr float HIGH_SPEED_RATIO = 1.f; // 高速モード [m/s]
+    constexpr float LOW_SPEED_RATIO = 0.3f; // 低速モード [m/s]
+    // 旋回速度の最大値（モードの影響無し）
+    constexpr float TURN_SPEED = 1.f; // [rad/s]
+}
