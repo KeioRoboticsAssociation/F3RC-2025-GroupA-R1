@@ -1,5 +1,4 @@
 #include <mbed.h>
-#include <stdio.h>
 #include "controller/Controller.hpp"
 #include "components/drivetrain/DriveTrain.hpp"
 
@@ -31,7 +30,7 @@ int main()
 
     WheelController<3> wheel_controller(config, {&dc1, &dc2, &dc3});
 
-    Controller joy(PB_10, PC_5, ControllerConfig::BAUD_RATE);
+    Controller joy(ControllerConfig::tx, ControllerConfig::rx, ControllerConfig::BAUD_RATE);
     DriveTrain<3> drive_train(wheel_controller);
 
     while (1)

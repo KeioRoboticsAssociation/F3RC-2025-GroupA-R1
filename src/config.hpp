@@ -30,6 +30,8 @@ namespace PwmOutPins
 
 namespace ControllerConfig
 {
+    constexpr PinName tx = PB_10;
+    constexpr PinName rx = PC_5;
     constexpr int BAUD_RATE = 115200;
 }
 
