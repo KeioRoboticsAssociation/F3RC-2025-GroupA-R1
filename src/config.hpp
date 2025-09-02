@@ -23,9 +23,7 @@ namespace PwmOutPins
     constexpr PinName PSEUDO_SERVO1_PWM = PB_0 ;     // 疑似サーボ用DC1のPWM (Tim3)
 
     constexpr PinName SERVO1_PWM        = PB_2 ;     // サーボ用PWM (Tim2)
-    // PA_0 は OMUNI_MOTOR2_DIR で既に使用されているためピンが競合しています。
-    // ハードウェアの仕様を確認し、利用可能なPWMピンに変更してください。ここでは例として PA_3 を使用します。
-    constexpr PinName SERVO2_PWM        = PA_3 ;     // サーボ用PWM (Tim2)
+    constexpr PinName SERVO2_PWM        = PA_10;     // サーボ用PWM (Tim2)
 }
 
 namespace ControllerConfig
