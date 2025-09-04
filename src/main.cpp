@@ -3,9 +3,12 @@
 #include <array>
 #include <cmath>
 #include "controller/Controller.hpp"
+#include "components/SubArm.hpp"
 #include "components/drivetrain/DriveTrain.hpp"
-#include "drivers/ServoMotor.hpp"
 #include "drivers/DCMotor.hpp"
+#include "drivers/SoftwareServo.hpp" // ServoMotorの代わりにSoftwareServoをインクルード
+#include "components/ElectricWireArm.hpp"
+#include "config.hpp"
 
 asm(".global _printf_float"); // printfでfloatを使えるようにする
 
@@ -14,12 +17,14 @@ int main()
     DCMotor dc1(PwmOutPins::OMUNI_MOTOR1_PWM, DigitalOutPins::OMUNI_MOTOR1_DIR);
     DCMotor dc2(PwmOutPins::OMUNI_MOTOR2_PWM, DigitalOutPins::OMUNI_MOTOR2_DIR);
     DCMotor dc3(PwmOutPins::OMUNI_MOTOR3_PWM, DigitalOutPins::OMUNI_MOTOR3_DIR);
+    DCMotor dc4(PwmOutPins::PSEUDO_SERVO1_PWM, DigitalOutPins::PSEUDO_SERVO1_DIR);
 
-    // サーボモーターのセットアップ
-    ServoMotor servo1(PwmOutPins::SERVO1_PWM);
-    ServoMotor servo2(PwmOutPins::SERVO2_PWM);
-    servo1.init();
-    servo2.init(); 
+    // サーボモーターのセットアップ (SoftwareServoを使用)
+    SoftwareServo servo1(PwmOutPins::SERVO1_PWM);
+    SoftwareServo servo2(PwmOutPins::SERVO2_PWM);
+
+    // wire armのセットアップ
+    ElectricWireArm wire_arm(dc4);
 
     std::array<WheelConfig, 3> config = {
         WheelConfig{
@@ -64,39 +69,64 @@ int main()
         //        joy.L2(),        // L2
         //        joy.R2());       // R2
 
-        drive_train.move(joy.rStickX(), joy.rStickY(), joy.L2(), joy.R2());
+        // コントローラーの入力値を変数に格納して可読性を向上
+        const float move_x = joy.rStickX(); // 横移動
+        const float move_y = joy.rStickY(); // 縦移動
+        const bool turn_l_pressed = joy.L2();      // 左旋回
+        const bool turn_r_pressed = joy.R2();      // 右旋回
+        drive_train.move(move_x, move_y, turn_l_pressed, turn_r_pressed);
 
         if (joy.R1())
         {
             drive_train.changeToHighSpeedMode();
+            printf("high speed mode\n");
         }
         else if (joy.L1())
         {
             drive_train.changeToLowSpeedMode();
+            printf("low speed mode\n");
         }
 
+        if (joy.dpadUp())
+        {
+            wire_arm.extend();
+            printf("extending\n");
+            
+        }
+        else if (joy.dpadDown())
+        {
+            wire_arm.retract();
+            printf("retracting\n");
+        } else {
+            wire_arm.stop();
+        }
+   
+
         // SubArmのサーボモーター制御
-        // R1/L1は足回りの速度変更で使用しているため、別のボタンに変更します。
-        // 例: △ボタンでサーボ1を90度、×ボタンで0度へ
         if (joy.triangle())
         {
-            servo1.setAngleDeg(90);
+            servo1.setAngleDeg(0); // 角度は要調整
+            printf("lifting arm\n");
         }
         else if (joy.cross())
         {
-            servo1.setAngleDeg(0);
+            servo1.setAngleDeg(90); // 角度は要調整
+            printf("dropping arm\n");
         }
 
-        // R2/L2は足回りの旋回で使用しているため、別のボタンに変更します。
-        // 例: ○ボタンでサーボ2を90度、□ボタンで0度へ
+        // SubArmのクロー制御
         if (joy.circle())
         {
-            servo2.setAngleDeg(90);
+            servo2.setAngleDeg(0); // 角度は要調整
+            printf("opening claw\n");
         }
         else if (joy.square())
         {
-            servo2.setAngleDeg(0);
+            servo2.setAngleDeg(90); // 角度は要調整
+            printf("closing claw\n");
         }
+        
+        // 100ms待機
         wait_us(100000);
     }
 }

@@ -10,10 +10,10 @@ public:
         esp.attach(callback(this, &Controller::readEsp), UnbufferedSerial::RxIrq);
     }
 
-    inline float lStickX() { return (float)data[0] / STICK_NORMALIZE_FACTOR; };
-    inline float lStickY() { return -(float)data[1] / STICK_NORMALIZE_FACTOR; };
-    inline float rStickX() { return (float)data[2] / STICK_NORMALIZE_FACTOR; };
-    inline float rStickY() { return -(float)data[3] / STICK_NORMALIZE_FACTOR; };
+    inline float lStickX() { return -(float)data[0] / STICK_NORMALIZE_FACTOR; };
+    inline float lStickY() { return (float)data[1] / STICK_NORMALIZE_FACTOR; };
+    inline float rStickX() { return -(float)data[2] / STICK_NORMALIZE_FACTOR; };
+    inline float rStickY() { return (float)data[3] / STICK_NORMALIZE_FACTOR; };
     inline bool dpadUp() { return data[4] == 1; };
     inline bool dpadDown() { return data[4] == 2; };
     inline bool dpadRight() { return data[4] == 4; };
