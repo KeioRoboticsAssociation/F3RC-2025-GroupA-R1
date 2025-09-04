@@ -1,23 +1,23 @@
 #include "components/SubArm.hpp"
+#include "config.hpp"
 
-SubArm::SubArm(ServoMotor& arm_servo, ServoMotor& claw_servo)
+SubArm::SubArm(SoftwareServo& arm_servo, SoftwareServo& claw_servo)
     : arm(arm_servo), claw(claw_servo) {
-        arm.init();
-        claw.init();
+        // SoftwareServoはコンストラクタで初期化されるため、init()呼び出しは不要です。
         dropArm();
-        closeClaw();
+        openClaw(); // 安全のため、初期状態ではクローを開いておきます。
     }
 
 void SubArm::liftArm() {
-    arm.setAngleDeg(0.0f);
+    arm.setAngleDeg(SubArmConfig::ARM_LIFT_ANGLE_DEG);
 }
 void SubArm::dropArm() {
-    arm.setAngleDeg(90.0f);
+    arm.setAngleDeg(SubArmConfig::ARM_DROP_ANGLE_DEG);
 }
 
 void SubArm::openClaw() {
-    claw.setAngleDeg(0.0f);
+    claw.setAngleDeg(SubArmConfig::CLAW_OPEN_ANGLE_DEG);
 }
 void SubArm::closeClaw() {
-    claw.setAngleDeg(45.0f);
+    claw.setAngleDeg(SubArmConfig::CLAW_CLOSE_ANGLE_DEG);
 }

@@ -5,7 +5,7 @@
 
 namespace DigitalOutPins
 {
-    constexpr PinName OMUNI_MOTOR1_DIR  = PA_10;     // オムニホイールDC1の方向
+    constexpr PinName OMUNI_MOTOR1_DIR  = PC_10;     // オムニホイールDC1の方向
     constexpr PinName OMUNI_MOTOR2_DIR  = PA_0 ;     // オムニホイールDC2の方向
     constexpr PinName OMUNI_MOTOR3_DIR  = PC_3 ;     // オムニホイールDC3の方向
 
@@ -39,8 +39,30 @@ namespace DriveConfig
     constexpr float TREAD_RAD = 100.f;
 
     // ここの値は要検証
-    constexpr float HIGH_SPEED_RATIO = 1.f; // 高速モード [m/s]
-    constexpr float LOW_SPEED_RATIO = 0.3f; // 低速モード [m/s]
+    // DriveTrain内で並進速度を計算する際の係数。
+    // 1.0の場合、スティック最大入力でロボット中心の速度が TREAD_RAD [mm/s] となる。
+    // 値を大きくすると、より高速に移動する。まずは5.0あたりで試すことを推奨。
+    constexpr float HIGH_SPEED_RATIO = 5.f; // 高速モード時の速度係数 (無次元)
+    constexpr float LOW_SPEED_RATIO = 1.5f; // 低速モード時の速度係数 (無次元)
     // 旋回速度の最大値（モードの影響無し）
     constexpr float TURN_SPEED = 1.f; // [rad/s]
+}
+
+namespace SubArmConfig
+{
+    // アームの角度 [deg]
+    constexpr float ARM_LIFT_ANGLE_DEG = 0.0f;
+    constexpr float ARM_DROP_ANGLE_DEG = 90.0f;
+
+    // クローの角度 [deg]
+    constexpr float CLAW_OPEN_ANGLE_DEG = 0.0f;
+    constexpr float CLAW_CLOSE_ANGLE_DEG = 45.0f;
+}
+
+namespace ElectricWireArmConfig
+{
+    // ワイヤーアームのモーター出力（デューティ比, -1.0 ~ 1.0）
+    // 0.5fでは摩擦に負けて動かない可能性があったため、少し出力を上げます。
+    constexpr float EXTEND_SPEED = 0.7f;
+    constexpr float RETRACT_SPEED = -0.7f;
 }

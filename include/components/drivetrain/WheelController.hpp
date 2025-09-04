@@ -31,6 +31,15 @@ public:
         }
     }
 
+    int test_print()
+    {
+        for (int i = 0; i < N; i++)
+        {
+            printf("wheel_vector[%d]: kx=%f, ky=%f, ktheta=%f\n", i, wheel_vectors[i].kx, wheel_vectors[i].ky, wheel_vectors[i].ktheta);
+        }
+        return 0;
+    }
+
     std::array<float, N> twistToMotorSpeeds(const Twist twist)
     {
         std::array<float, N> speeds;
@@ -56,5 +65,6 @@ public:
 private:
     std::array<DCMotor *, N> motors;
     float max_duty;
+    
     std::array<WheelVector, N> wheel_vectors;
 };
